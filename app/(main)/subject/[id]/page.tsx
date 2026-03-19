@@ -6,33 +6,37 @@ import { ListItem } from "@/app/_components/sections/ListItem";
 import { AddItemForm } from "@/app/_components/sections/AddItemForm";
 import { FloatingAddButton } from "@/app/_components/buttons/FloatingAddButton";
 
-const initialSubjects = [
-  { id: "1", title: "데이터베이스" },
-  { id: "2", title: "알고리즘" },
-  { id: "3", title: "자료구조" },
+const initialWeeks = [
+  { id: "1", title: "1주차" },
+  { id: "2", title: "2주차" },
+  { id: "3", title: "3주차" },
 ];
 
-export default function Home() {
-  const [subjects, setSubjects] = useState(initialSubjects);
+export default function SubjectDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const [weeks, setWeeks] = useState(initialWeeks);
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAdd = (title: string) => {
-    const newSubject = {
+    const newWeek = {
       id: String(Date.now()),
       title,
     };
-    setSubjects((prev) => [...prev, newSubject]);
+    setWeeks((prev) => [...prev, newWeek]);
     setIsAdding(false);
   };
 
   return (
     <AppShell>
       <div className="flex flex-col">
-        {subjects.map((subject) => (
+        {weeks.map((week) => (
           <ListItem
-            key={subject.id}
-            title={subject.title}
-            href={`/subject/${subject.id}`}
+            key={week.id}
+            title={week.title}
+            href={`#`}
           />
         ))}
         {isAdding && (

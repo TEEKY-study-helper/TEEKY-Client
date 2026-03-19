@@ -1,4 +1,4 @@
-import type { SectionItem } from "../types";
+import type { SectionItem } from "@/app/types";
 
 type InfoSectionListProps = {
   items: SectionItem[];
