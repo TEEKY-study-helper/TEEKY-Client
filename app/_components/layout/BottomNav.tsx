@@ -2,41 +2,55 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon } from "@/app/_components/icons/HomeIcon";
-import { HeartIcon } from "@/app/_components/icons/HeartIcon";
-import { ChecklistIcon } from "@/app/_components/icons/ChecklistIcon";
-import { ProfileIcon } from "@/app/_components/icons/ProfileIcon";
+import { Home, Heart, ClipboardList, CircleUserRound } from "lucide-react";
+import { cn } from "@/app/_lib/utils";
 
 const navItems = [
-  { href: "/", icon: HomeIcon, label: "홈" },
-  { href: "/friends", icon: HeartIcon, label: "친구" },
-  { href: "/tasks", icon: ChecklistIcon, label: "태스크" },
-  { href: "/my", icon: ProfileIcon, label: "마이" },
+  { href: "/", icon: Home, label: "홈" },
+  { href: "/friends", icon: Heart, label: "친구" },
+  { href: "/tasks", icon: ClipboardList, label: "태스크" },
+  { href: "/my", icon: CircleUserRound, label: "마이" },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] h-[68px] bg-[#eeeeee] rounded-t-[25px] shadow-[0px_-3px_4px_0px_rgba(0,0,0,0.08)] z-10">
-      <div className="flex items-center justify-around h-full px-4">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] z-10 border-t border-border/50 bg-card/80 backdrop-blur-md">
+      <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={[
-                "flex flex-col items-center gap-1",
-                isActive ? "text-black" : "text-black/60",
-              ].join(" ")}
+              className={cn(
+                "relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200",
+                isActive
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
             >
-              <item.icon className="size-[28px]" />
-              <span className="text-[10px] font-semibold">{item.label}</span>
+              {isActive && (
+                <span className="absolute -top-1 h-0.5 w-5 rounded-full bg-primary" />
+              )}
+              <item.icon
+                className={cn("size-5 transition-all", isActive && "scale-110")}
+                strokeWidth={isActive ? 2 : 1.5}
+              />
+              <span
+                className={cn(
+                  "text-[10px] transition-all",
+                  isActive ? "font-bold" : "font-medium"
+                )}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}
       </div>
+      <div className="h-[env(safe-area-inset-bottom)]" />
     </nav>
   );
 }
