@@ -3,10 +3,10 @@
 import { useState, use } from "react";
 import { CalendarDays } from "lucide-react";
 import { AppShell } from "@/app/_components/layout/AppShell";
-import { ListItem } from "@/app/_components/sections/ListItem";
-import { AddItemForm } from "@/app/_components/sections/AddItemForm";
-import { EmptyState } from "@/app/_components/sections/EmptyState";
-import { FloatingAddButton } from "@/app/_components/buttons/FloatingAddButton";
+import { ListItem } from "@/app/_components/shared/ListItem";
+import { AddItemForm } from "@/app/_components/shared/AddItemForm";
+import { EmptyState } from "@/app/_components/shared/EmptyState";
+import { FloatingAddButton } from "@/app/_components/shared/FloatingAddButton";
 
 const subjectNames: Record<string, string> = {
   "1": "데이터베이스",
@@ -23,13 +23,13 @@ const initialWeeks = [
 export default function SubjectDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ subjectId: string }>;
 }) {
-  const { id } = use(params);
+  const { subjectId } = use(params);
   const [weeks, setWeeks] = useState(initialWeeks);
   const [isAdding, setIsAdding] = useState(false);
 
-  const subjectName = subjectNames[id] ?? "과목";
+  const subjectName = subjectNames[subjectId] ?? "과목";
 
   const handleAdd = (title: string) => {
     const newWeek = {
@@ -54,7 +54,7 @@ export default function SubjectDetailPage({
             <ListItem
               key={week.id}
               title={week.title}
-              href="#"
+              href={`/subjects/${subjectId}/records/${week.id}`}
             />
           ))
         )}

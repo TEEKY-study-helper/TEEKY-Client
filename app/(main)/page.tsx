@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { BookOpen } from "lucide-react";
 import { AppShell } from "@/app/_components/layout/AppShell";
-import { ListItem } from "@/app/_components/sections/ListItem";
-import { AddItemForm } from "@/app/_components/sections/AddItemForm";
-import { EmptyState } from "@/app/_components/sections/EmptyState";
-import { FloatingAddButton } from "@/app/_components/buttons/FloatingAddButton";
+import { ListItem } from "@/app/_components/shared/ListItem";
+import { AddItemForm } from "@/app/_components/shared/AddItemForm";
+import { EmptyState } from "@/app/_components/shared/EmptyState";
+import { FloatingAddButton } from "@/app/_components/shared/FloatingAddButton";
 
 const initialSubjects = [
   { id: "1", title: "데이터베이스" },
@@ -41,7 +41,7 @@ export default function Home() {
             <ListItem
               key={subject.id}
               title={subject.title}
-              href={`/subject/${subject.id}`}
+              href={`/subjects/${subject.id}`}
             />
           ))
         )}
