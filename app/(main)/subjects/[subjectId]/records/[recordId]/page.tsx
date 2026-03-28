@@ -31,7 +31,7 @@ export default function RecordDetailPage({
   return (
     <AppShell title={breadcrumb} showBack>
       <div className="flex flex-col gap-4 p-4">
-        <FeatureCardGrid />
+        <FeatureCardGrid subjectId={subjectId} recordId={recordId} />
         <RecordContent />
       </div>
     </AppShell>
