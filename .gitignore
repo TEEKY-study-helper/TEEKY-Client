@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Claude
 .claude/
+
+# etc
+study.md
