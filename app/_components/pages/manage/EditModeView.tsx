@@ -59,6 +59,7 @@ export function EditModeView({
               <button
                 key={file.id}
                 onClick={() => toggleSelect(file.id)}
+                aria-pressed={isSelected}
                 className={[
                   "flex min-h-[44px] w-full items-center gap-3 rounded-xl px-4 py-3 ring-1 transition-all duration-150",
                   isSelected
