@@ -15,7 +15,8 @@ export function CapacityIndicator({
   usedBytes,
   maxBytes,
 }: CapacityIndicatorProps) {
-  const percentage = Math.min((usedBytes / maxBytes) * 100, 100);
+  const percentage =
+    maxBytes > 0 ? Math.min((usedBytes / maxBytes) * 100, 100) : 0;
 
   return (
     <div className="flex items-center justify-between px-1">
