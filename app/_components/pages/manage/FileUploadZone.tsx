@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Plus } from "lucide-react";
 
 const ACCEPTED_TYPES = ".pdf,.doc,.docx,.ppt,.pptx";
+const ACCEPTED_EXTENSIONS = ACCEPTED_TYPES.split(",");
 
 type FileUploadZoneProps = {
   onFilesSelected: (files: File[]) => void;
@@ -23,8 +24,14 @@ export function FileUploadZone({
 
   function handleFiles(fileList: FileList | null) {
     if (!fileList) return;
-    const remaining = maxFiles - currentFileCount;
-    const files = Array.from(fileList).slice(0, remaining);
+    const remaining = Math.max(0, maxFiles - currentFileCount);
+    const files = Array.from(fileList)
+      .filter((file) =>
+        ACCEPTED_EXTENSIONS.some((ext) =>
+          file.name.toLowerCase().endsWith(ext),
+        ),
+      )
+      .slice(0, remaining);
     if (files.length > 0) {
       onFilesSelected(files);
     }
