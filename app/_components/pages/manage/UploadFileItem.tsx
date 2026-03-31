@@ -12,8 +12,9 @@ function truncateName(name: string, max: number = 15): string {
   if (ext > 0) {
     const base = name.slice(0, ext);
     const extension = name.slice(ext);
-    const truncated = base.slice(0, max - 3 - extension.length);
-    return `${truncated}...${extension}`;
+    const available = Math.max(0, max - 3 - extension.length);
+    if (available === 0) return `...${extension}`;
+    return `${base.slice(0, available)}...${extension}`;
   }
   return name.slice(0, max - 3) + "...";
 }
