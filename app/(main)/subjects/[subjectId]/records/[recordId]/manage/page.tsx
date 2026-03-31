@@ -151,7 +151,13 @@ export default function ManagePage({
   const handleStartLearning = useCallback(() => {
     setMode("learning");
     setUploadFiles((prev) =>
-      prev.map((f) => ({ ...f, learningStatus: "learning" as const }))
+      prev.map((f) => ({
+        ...f,
+        learningStatus:
+          f.uploadStatus === "uploaded"
+            ? ("learning" as const)
+            : ("error" as const),
+      }))
     );
 
     uploadFiles
