@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useCallback } from "react";
+import { use, useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/app/_components/layout/AppShell";
 import { Button } from "@/app/_components/ui/button";
@@ -60,6 +60,13 @@ export default function ManagePage({
     useState<CompletedFile[]>(mockCompletedFiles);
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [capacity, setCapacity] = useState(mockCapacity);
+  const uploadCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (uploadCheckRef.current) clearInterval(uploadCheckRef.current);
+    };
+  }, []);
 
   const handleFilesSelected = useCallback(
     (files: File[]) => {
@@ -108,13 +115,20 @@ export default function ManagePage({
       });
 
       // Check when all uploads are done
-      const checkInterval = setInterval(() => {
+      if (uploadCheckRef.current) clearInterval(uploadCheckRef.current);
+      uploadCheckRef.current = setInterval(() => {
         setUploadFiles((prev) => {
+          if (prev.length === 0) {
+            clearInterval(uploadCheckRef.current!);
+            uploadCheckRef.current = null;
+            return prev;
+          }
           const allDone = prev.every(
             (f) => f.uploadStatus === "uploaded" || f.uploadStatus === "error"
           );
-          if (allDone && prev.length > 0) {
-            clearInterval(checkInterval);
+          if (allDone) {
+            clearInterval(uploadCheckRef.current!);
+            uploadCheckRef.current = null;
             setMode("file-selected");
           }
           return prev;
