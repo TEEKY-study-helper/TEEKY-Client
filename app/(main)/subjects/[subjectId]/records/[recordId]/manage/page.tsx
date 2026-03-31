@@ -216,9 +216,11 @@ export default function ManagePage({
 
   const handleRetryLearning = useCallback(() => {
     setUploadFiles((prev) =>
-      prev
-        .filter((f) => f.learningStatus === "error")
-        .map((f) => ({ ...f, learningStatus: "learning" as const }))
+      prev.map((f) =>
+        f.learningStatus === "error"
+          ? { ...f, learningStatus: "learning" as const }
+          : f
+      )
     );
     setMode("learning");
 
