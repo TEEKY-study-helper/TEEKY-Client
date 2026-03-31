@@ -11,12 +11,6 @@ import { simulateMove } from "@/app/_lib/mock/manage-actions";
 import { FolderList } from "@/app/_components/pages/manage/move/FolderList";
 import { MoveConfirmDialog } from "@/app/_components/pages/manage/move/MoveConfirmDialog";
 
-const recordToWeek: Record<string, number> = {
-  "1": 1,
-  "2": 2,
-  "3": 3,
-};
-
 export default function MovePage({
   params,
 }: {
@@ -27,7 +21,7 @@ export default function MovePage({
   const searchParams = useSearchParams();
 
   const fileIds = (searchParams.get("files") ?? "").split(",").filter(Boolean);
-  const currentWeek = recordToWeek[recordId] ?? 1;
+  const currentWeek = parseInt(recordId, 10) || 1;
 
   const folders: WeekFolder[] = mockWeekFolders.map((f) => ({
     ...f,
