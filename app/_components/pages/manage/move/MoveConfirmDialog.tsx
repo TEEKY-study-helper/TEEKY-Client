@@ -32,8 +32,11 @@ export function MoveConfirmDialog({
 
   async function handleConfirm() {
     setIsLoading(true);
-    await onConfirm();
-    setIsLoading(false);
+    try {
+      await onConfirm();
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
