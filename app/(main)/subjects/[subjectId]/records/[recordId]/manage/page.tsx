@@ -263,17 +263,20 @@ export default function ManagePage({
     async (fileIds: string[]) => {
       await simulateDelete(fileIds);
       const deletedSet = new Set(fileIds);
-      const deletedFiles = completedFiles.filter((f) => deletedSet.has(f.id));
-      setCompletedFiles((prev) => prev.filter((f) => !deletedSet.has(f.id)));
+      let deletedBytes = 0;
+      setCompletedFiles((prev) => {
+        const deletedFiles = prev.filter((f) => deletedSet.has(f.id));
+        deletedBytes = deletedFiles.reduce((sum, f) => sum + f.size, 0);
+        return prev.filter((f) => !deletedSet.has(f.id));
+      });
       setCapacity((prev) => ({
         ...prev,
-        usedBytes:
-          prev.usedBytes - deletedFiles.reduce((sum, f) => sum + f.size, 0),
+        usedBytes: prev.usedBytes - deletedBytes,
       }));
       setMode("idle");
       toast.success(`${fileIds.length}개 파일이 삭제되었습니다.`);
     },
-    [completedFiles]
+    []
   );
 
   const handleMoveNavigate = useCallback(
