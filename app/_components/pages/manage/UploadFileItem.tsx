@@ -33,6 +33,7 @@ export function UploadFileItem({ file, onRemove }: UploadFileItemProps) {
       ) : (
         <button
           onClick={() => onRemove(file.id)}
+          aria-label={`${file.originalName} 삭제`}
           className="flex size-6 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-muted"
         >
           <X className="size-4 text-muted-foreground" />
