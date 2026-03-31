@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from 'next/font/google';
+import { Toaster } from "@/app/_components/ui/sonner";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body className={`${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistMono.variable} antialiased`}>
+        {children}
+        <Toaster position="top-center" duration={3000} />
+      </body>
     </html>
   );
 }
