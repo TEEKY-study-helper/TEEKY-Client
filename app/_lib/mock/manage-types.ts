@@ -5,7 +5,7 @@ export interface UploadFile {
   originalName: string;
   size: number;
   uploadStatus: "pending" | "uploading" | "uploaded" | "error";
-  learningStatus: "idle" | "learning" | "completed" | "error";
+  processingStatus: "idle" | "processing" | "completed" | "error";
 }
 
 export interface CompletedFile {
@@ -29,7 +29,7 @@ export type ManagePageMode =
   | "idle"
   | "file-selected"
   | "uploading"
-  | "learning"
-  | "learn-success"
-  | "learn-error"
+  | "processing"
+  | "upload-success"
+  | "upload-error"
   | "editing";
