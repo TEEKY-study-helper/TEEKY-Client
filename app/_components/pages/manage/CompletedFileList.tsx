@@ -18,7 +18,7 @@ export function CompletedFileList({
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between px-1">
         <h3 className="text-sm font-bold text-foreground">
-          학습 완료 파일 목록
+          업로드 완료 파일 목록
         </h3>
         <button
           onClick={onEdit}

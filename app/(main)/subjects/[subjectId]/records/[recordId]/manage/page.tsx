@@ -16,16 +16,16 @@ import {
 } from "@/app/_lib/mock/manage-data";
 import {
   simulateUpload,
-  simulateLearning,
+  simulateProcessing,
   simulateDelete,
 } from "@/app/_lib/mock/manage-actions";
 
 import { CapacityIndicator } from "@/app/_components/pages/manage/CapacityIndicator";
 import { FileUploadZone } from "@/app/_components/pages/manage/FileUploadZone";
 import { UploadFileList } from "@/app/_components/pages/manage/UploadFileList";
-import { AiLearningStatus } from "@/app/_components/pages/manage/AiLearningStatus";
-import { LearningCompleteView } from "@/app/_components/pages/manage/LearningCompleteView";
-import { LearningErrorView } from "@/app/_components/pages/manage/LearningErrorView";
+import { UploadProgressStatus } from "@/app/_components/pages/manage/UploadProgressStatus";
+import { UploadCompleteView } from "@/app/_components/pages/manage/UploadCompleteView";
+import { UploadErrorView } from "@/app/_components/pages/manage/UploadErrorView";
 import { CompletedFileList } from "@/app/_components/pages/manage/CompletedFileList";
 import { EditModeView } from "@/app/_components/pages/manage/EditModeView";
 
@@ -92,7 +92,7 @@ export default function ManagePage({
         originalName: file.name,
         size: file.size,
         uploadStatus: "pending" as const,
-        learningStatus: "idle" as const,
+        processingStatus: "idle" as const,
       }));
 
       setUploadFiles((prev) => [...prev, ...newUploadFiles]);
@@ -148,14 +148,14 @@ export default function ManagePage({
     });
   }, []);
 
-  const handleStartLearning = useCallback(() => {
-    setMode("learning");
+  const handleStartUpload = useCallback(() => {
+    setMode("processing");
     setUploadFiles((prev) =>
       prev.map((f) => ({
         ...f,
-        learningStatus:
+        processingStatus:
           f.uploadStatus === "uploaded"
-            ? ("learning" as const)
+            ? ("processing" as const)
             : ("error" as const),
       }))
     );
@@ -163,24 +163,24 @@ export default function ManagePage({
     uploadFiles
       .filter((f) => f.uploadStatus === "uploaded")
       .forEach((uf) => {
-        simulateLearning(uf.id).then((result) => {
+        simulateProcessing(uf.id).then((result) => {
           setUploadFiles((prev) => {
             const updated = prev.map((f) =>
-              f.id === uf.id ? { ...f, learningStatus: result } : f
+              f.id === uf.id ? { ...f, processingStatus: result } : f
             );
 
             const allDone = updated.every(
               (f) =>
-                f.learningStatus === "completed" ||
-                f.learningStatus === "error"
+                f.processingStatus === "completed" ||
+                f.processingStatus === "error"
             );
 
             if (allDone) {
               const hasError = updated.some(
-                (f) => f.learningStatus === "error"
+                (f) => f.processingStatus === "error"
               );
               setTimeout(() => {
-                setMode(hasError ? "learn-error" : "learn-success");
+                setMode(hasError ? "upload-error" : "upload-success");
               }, 500);
             }
 
@@ -190,9 +190,9 @@ export default function ManagePage({
       });
   }, [uploadFiles]);
 
-  const handleLearningComplete = useCallback(() => {
+  const handleUploadComplete = useCallback(() => {
     const newCompleted: CompletedFile[] = uploadFiles
-      .filter((f) => f.learningStatus === "completed")
+      .filter((f) => f.processingStatus === "completed")
       .map((f) => ({
         id: f.id,
         name: f.name,
@@ -211,40 +211,40 @@ export default function ManagePage({
     }));
     setUploadFiles([]);
     setMode("idle");
-    toast.success("학습이 완료되었습니다.");
+    toast.success("업로드가 완료되었습니다.");
   }, [uploadFiles, recordId]);
 
-  const handleRetryLearning = useCallback(() => {
+  const handleRetryUpload = useCallback(() => {
     setUploadFiles((prev) =>
       prev.map((f) =>
-        f.learningStatus === "error"
-          ? { ...f, learningStatus: "learning" as const }
+        f.processingStatus === "error"
+          ? { ...f, processingStatus: "processing" as const }
           : f
       )
     );
-    setMode("learning");
+    setMode("processing");
 
     uploadFiles
-      .filter((f) => f.learningStatus === "error")
+      .filter((f) => f.processingStatus === "error")
       .forEach((uf) => {
-        simulateLearning(uf.id).then((result) => {
+        simulateProcessing(uf.id).then((result) => {
           setUploadFiles((prev) => {
             const updated = prev.map((f) =>
-              f.id === uf.id ? { ...f, learningStatus: result } : f
+              f.id === uf.id ? { ...f, processingStatus: result } : f
             );
 
             const allDone = updated.every(
               (f) =>
-                f.learningStatus === "completed" ||
-                f.learningStatus === "error"
+                f.processingStatus === "completed" ||
+                f.processingStatus === "error"
             );
 
             if (allDone) {
               const hasError = updated.some(
-                (f) => f.learningStatus === "error"
+                (f) => f.processingStatus === "error"
               );
               setTimeout(() => {
-                setMode(hasError ? "learn-error" : "learn-success");
+                setMode(hasError ? "upload-error" : "upload-success");
               }, 500);
             }
 
@@ -339,28 +339,28 @@ export default function ManagePage({
               currentFileCount={uploadFiles.length}
             />
             <Button
-              onClick={handleStartLearning}
+              onClick={handleStartUpload}
               disabled={!hasUploadedFiles || mode === "uploading"}
               className="h-12 w-full rounded-xl text-base font-medium"
             >
-              인공지능 학습시키기
+              파일 업로드하기
             </Button>
           </>
         )}
 
-        {/* AI Learning in progress */}
-        {mode === "learning" && <AiLearningStatus files={uploadFiles} />}
+        {/* Upload processing in progress */}
+        {mode === "processing" && <UploadProgressStatus files={uploadFiles} />}
 
-        {/* Learning complete */}
-        {mode === "learn-success" && (
-          <LearningCompleteView onComplete={handleLearningComplete} />
+        {/* Upload complete */}
+        {mode === "upload-success" && (
+          <UploadCompleteView onComplete={handleUploadComplete} />
         )}
 
-        {/* Learning error */}
-        {mode === "learn-error" && (
-          <LearningErrorView
+        {/* Upload error */}
+        {mode === "upload-error" && (
+          <UploadErrorView
             files={uploadFiles}
-            onRetry={handleRetryLearning}
+            onRetry={handleRetryUpload}
             onCancel={handleCancelUpload}
           />
         )}
