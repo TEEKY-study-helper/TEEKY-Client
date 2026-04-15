@@ -9,7 +9,7 @@ export function RecordContent() {
       <div className="mt-8">
         <EmptyState
           icon={<Frown className="size-16" />}
-          title="파일을 업로드하여"
+          title="문제를 생성하여"
           description="공부를 시작해보세요!"
         />
       </div>
