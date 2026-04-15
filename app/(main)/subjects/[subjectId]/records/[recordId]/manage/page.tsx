@@ -27,7 +27,6 @@ import { UploadProgressStatus } from "@/app/_components/pages/manage/UploadProgr
 import { UploadCompleteView } from "@/app/_components/pages/manage/UploadCompleteView";
 import { UploadErrorView } from "@/app/_components/pages/manage/UploadErrorView";
 import { CompletedFileList } from "@/app/_components/pages/manage/CompletedFileList";
-import { EditModeView } from "@/app/_components/pages/manage/EditModeView";
 
 const subjectNames: Record<string, string> = {
   "1": "데이터베이스",
@@ -300,38 +299,29 @@ export default function ManagePage({
 
   return (
     <AppShell title={breadcrumb} showBack>
-      <div className="flex flex-col gap-4 p-4">
-        <CapacityIndicator
-          usedBytes={capacity.usedBytes}
-          maxBytes={capacity.maxBytes}
-        />
+      <div className='flex flex-col gap-4 p-4'>
+        <CapacityIndicator usedBytes={capacity.usedBytes} maxBytes={capacity.maxBytes} />
 
-        {/* Idle: show completed files + upload zone */}
-        {mode === "idle" && (
+        {/* Idle / Editing: 동일 레이아웃, CompletedFileList가 editing 상태를 인라인으로 처리 */}
+        {(mode === 'idle' || mode === 'editing') && (
           <>
+            <FileUploadZone onFilesSelected={handleFilesSelected} />
             <CompletedFileList
               files={completedFiles}
-              onEdit={() => setMode("editing")}
+              mode={mode}
+              onEdit={() => setMode('editing')}
               onFileTap={handleFileTap}
+              onCancel={() => setMode('idle')}
+              onDelete={handleDeleteFiles}
+              onMoveNavigate={handleMoveNavigate}
             />
-            <FileUploadZone onFilesSelected={handleFilesSelected} />
           </>
         )}
 
         {/* File selected / Uploading */}
-        {(mode === "file-selected" || mode === "uploading") && (
+        {(mode === 'file-selected' || mode === 'uploading') && (
           <>
-            {completedFiles.length > 0 && (
-              <CompletedFileList
-                files={completedFiles}
-                onEdit={() => setMode("editing")}
-                onFileTap={handleFileTap}
-              />
-            )}
-            <UploadFileList
-              files={uploadFiles}
-              onRemove={handleRemoveUploadFile}
-            />
+            <UploadFileList files={uploadFiles} onRemove={handleRemoveUploadFile} />
             <FileUploadZone
               compact
               onFilesSelected={handleFilesSelected}
@@ -340,39 +330,34 @@ export default function ManagePage({
             />
             <Button
               onClick={handleStartUpload}
-              disabled={!hasUploadedFiles || mode === "uploading"}
-              className="h-12 w-full rounded-xl text-base font-medium"
+              disabled={!hasUploadedFiles || mode === 'uploading'}
+              className='h-12 w-full rounded-xl text-base font-medium'
             >
               파일 업로드하기
             </Button>
+            {completedFiles.length > 0 && (
+              <CompletedFileList
+                files={completedFiles}
+                mode={mode}
+                onEdit={() => setMode('editing')}
+                onFileTap={handleFileTap}
+                onCancel={() => setMode('idle')}
+                onDelete={handleDeleteFiles}
+                onMoveNavigate={handleMoveNavigate}
+              />
+            )}
           </>
         )}
 
         {/* Upload processing in progress */}
-        {mode === "processing" && <UploadProgressStatus files={uploadFiles} />}
+        {mode === 'processing' && <UploadProgressStatus files={uploadFiles} />}
 
         {/* Upload complete */}
-        {mode === "upload-success" && (
-          <UploadCompleteView onComplete={handleUploadComplete} />
-        )}
+        {mode === 'upload-success' && <UploadCompleteView onComplete={handleUploadComplete} />}
 
         {/* Upload error */}
-        {mode === "upload-error" && (
-          <UploadErrorView
-            files={uploadFiles}
-            onRetry={handleRetryUpload}
-            onCancel={handleCancelUpload}
-          />
-        )}
-
-        {/* Edit mode */}
-        {mode === "editing" && (
-          <EditModeView
-            files={completedFiles}
-            onCancel={() => setMode("idle")}
-            onDelete={handleDeleteFiles}
-            onMoveNavigate={handleMoveNavigate}
-          />
+        {mode === 'upload-error' && (
+          <UploadErrorView files={uploadFiles} onRetry={handleRetryUpload} onCancel={handleCancelUpload} />
         )}
       </div>
     </AppShell>
