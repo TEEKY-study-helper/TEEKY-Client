@@ -5,7 +5,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## CLAUDE.md Maintenance
 
 - **Language:** All content in this file must be written in English.
-- **Living document:** During any conversation, if a question, correction, or new pattern surfaces that would benefit future sessions, Claude and the user should jointly decide whether to update this file. When in doubt, propose the update and let the user confirm.
+- **Living document:** CLAUDE.md must stay in sync with the actual codebase. Claude is responsible for keeping it up to date.
+
+### When Claude MUST update CLAUDE.md (no prompting required)
+
+Update immediately after completing a task if any of the following occurred:
+
+| Trigger | Section to update |
+|---|---|
+| A new page or route was added | Project Structure tree |
+| A new shadcn/ui component was installed | Installed shadcn/ui Components |
+| A new shared/layout/page component was created | Project Structure tree |
+| A new pattern was established (styling, types, state, etc.) | Relevant guideline section |
+| An existing guideline was corrected or contradicted in practice | That guideline |
+| A new architectural decision was made (e.g., new lib, new folder) | Architecture section |
+| A new state management library was introduced | State Management Strategy |
+| A `BACK_NAV_OVERRIDES` entry was added or changed | Back Navigation section |
+
+### Update process
+
+1. **During the task** — note any pattern, decision, or structure change that differs from or extends the current CLAUDE.md.
+2. **After completing the task** — edit CLAUDE.md directly to reflect the change. Do not ask for permission; apply the update.
+3. **When unsure** — if the change is ambiguous (e.g., a one-off vs. an established pattern), make the edit and briefly mention it at the end of the response so the user can revert if needed.
+
+> The goal is for the next session to open with an accurate CLAUDE.md — not one that drifted from the actual codebase.
 
 ## Project Overview
 
