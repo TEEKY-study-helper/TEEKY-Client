@@ -73,7 +73,7 @@ export function CompletedFileList({
         ) : (
           <button
             onClick={onEdit}
-            className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
+            className="-mx-2 inline-flex min-h-[44px] items-center px-2 text-xs font-medium text-primary transition-colors hover:text-primary/80"
           >
             편집
           </button>
