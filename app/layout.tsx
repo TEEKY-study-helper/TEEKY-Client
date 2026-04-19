@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang='ko'>
       <body className={`${geistMono.variable} antialiased`}>
         {children}
-        <Toaster position="top-center" duration={3000} />
+        <Toaster position="bottom-center" duration={3000} offset={80} mobileOffset={80} visibleToasts={1} />
       </body>
     </html>
   );
