@@ -135,3 +135,45 @@
     @apply font-sans;
   }
 }
+
+/* Sonner toast: fade in/out with compact layout (anchored above BottomNav) */
+[data-sonner-toaster][data-y-position="bottom"] {
+  --width: 320px;
+}
+
+[data-sonner-toaster][data-y-position="bottom"] [data-sonner-toast] {
+  transform: translateY(0) !important;
+  opacity: 0;
+  transition: opacity 260ms ease-in-out !important;
+  animation: none !important;
+  will-change: opacity;
+}
+
+[data-sonner-toaster][data-y-position="bottom"] [data-sonner-toast][data-mounted="true"] {
+  opacity: 1;
+}
+
+[data-sonner-toaster][data-y-position="bottom"] [data-sonner-toast][data-visible="false"],
+[data-sonner-toaster][data-y-position="bottom"] [data-sonner-toast][data-removed="true"] {
+  opacity: 0 !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast].cn-toast {
+  padding: 0.5rem 0.75rem !important;
+  min-height: unset !important;
+  gap: 0.5rem !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 4px 16px -4px oklch(0 0 0 / 0.12), 0 0 0 0.5px var(--border) !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast].cn-toast [data-title] {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+[data-sonner-toaster] [data-sonner-toast].cn-toast [data-icon] {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0;
+}

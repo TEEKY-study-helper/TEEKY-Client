@@ -12,7 +12,7 @@ export async function simulateUpload(
   });
 }
 
-export async function simulateLearning(
+export async function simulateProcessing(
   _fileId: string
 ): Promise<"completed" | "error"> {
   return new Promise((resolve) => {

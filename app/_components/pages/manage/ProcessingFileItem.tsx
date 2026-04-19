@@ -1,7 +1,7 @@
 import { Loader2, Check } from "lucide-react";
 import type { UploadFile } from "@/app/_lib/mock/manage-types";
 
-type LearningFileItemProps = {
+type ProcessingFileItemProps = {
   file: UploadFile;
 };
 
@@ -17,9 +17,9 @@ function truncateName(name: string, max: number = 20): string {
   return name.slice(0, max - 3) + "...";
 }
 
-export function LearningFileItem({ file }: LearningFileItemProps) {
-  const isCompleted = file.learningStatus === "completed";
-  const isError = file.learningStatus === "error";
+export function ProcessingFileItem({ file }: ProcessingFileItemProps) {
+  const isCompleted = file.processingStatus === "completed";
+  const isError = file.processingStatus === "error";
 
   const bgColor = isCompleted
     ? "bg-[#53BE4F]/10 ring-[#53BE4F]/20"
