@@ -20,7 +20,8 @@ import { SelectionCounter } from "./SelectionCounter";
 type CompletedFileListProps = {
   files: CompletedFile[];
   mode: ManagePageMode;
-  onEdit: () => void;
+  // Omit to render as read-only (e.g. while an upload flow is active)
+  onEdit?: () => void;
   onFileTap: (file: CompletedFile) => void;
   // editing mode handlers
   onCancel: () => void;
@@ -70,14 +71,14 @@ export function CompletedFileList({
         </h3>
         {isEditing ? (
           <SelectionCounter selected={selectedIds.size} total={files.length} />
-        ) : (
+        ) : onEdit ? (
           <button
             onClick={onEdit}
             className="-mx-2 inline-flex min-h-[44px] items-center px-2 text-xs font-medium text-primary transition-colors hover:text-primary/80"
           >
             편집
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* 파일 목록: idle → CompletedFileItem / editing → 선택 가능한 아이템 */}

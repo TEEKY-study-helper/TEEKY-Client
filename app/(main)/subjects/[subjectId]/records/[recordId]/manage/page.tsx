@@ -336,10 +336,11 @@ export default function ManagePage({
               파일 업로드하기
             </Button>
             {completedFiles.length > 0 && (
+              // Read-only during upload flow: editing would unmount this block
+              // and orphan uploadFiles state.
               <CompletedFileList
                 files={completedFiles}
                 mode={mode}
-                onEdit={() => setMode('editing')}
                 onFileTap={handleFileTap}
                 onCancel={() => setMode('idle')}
                 onDelete={handleDeleteFiles}
